@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="{% static 'main.css' %}"/>
+    <link rel="stylesheet" href="{% static 'nav.css' %}"/>
+    <title>{% block title %} Home {% endblock title %}</title>
+</head>
+<body>
+{% block nav %}
+    <div class="sidebar close">
+        <div class="logo-details">
+            <i class='bx bxs-pyramid'></i>
+            <span class="logo_name">DashBoard</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="#">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="#">Dashboard</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="iocn-link">
+                    <a href="#">
+                        <i class='bx bx-collection'></i>
+                        <span class="link_name">Category</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a class="link_name" href="#">Extras</a></li>
+                    <li><a href="#">Students</a></li>
+                    <li><a href="#">Teaches</a></li>
+                </ul>
+            </li>
+
+
+
+            <li>
+                <a href="#">
+                    <i class='bx bx-cog'></i>
+                    <span class="link_name">Settings</span>
+                </a>
+                <ul class="sub-menu blank">
+                    <li><a class="link_name" href="#">Settings</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+                    </div>
+                    <div class="name-job">
+                        <div class="profile_name">Wajahat Ahmad</div>
+                        <div class="job">Software Engineer</div>
+                    </div>
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <div class="home-content">
+            <i class='bx bx-menu'></i>
+            <span class="text">Welcome To GHSS Chitor CMS</span>
+        </div>
+    </section>
+    <script>
+        const arrows = document.querySelectorAll(".arrow");
+
+        arrows.forEach((arrow) => {
+            arrow.addEventListener("click", (e) => {
+                const arrowParent = e.target.closest(".arrow").parentElement.parentElement;
+                arrowParent.classList.toggle("showMenu");
+            });
+        });
+
+        const sidebar = document.querySelector(".sidebar");
+        const sidebarBtn = document.querySelector(".bx-menu");
+
+        sidebarBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+        });
+
+    </script>
+{% endblock nav %}
+{% block content %}
+{% endblock content %}
+</body>
+</html>
