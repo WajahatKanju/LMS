@@ -49,7 +49,7 @@
     .home-section {
         left: 78px;
         width: calc(100% - 78px);
-        z-index: 100;
+
     }
 
     .sidebar.close ~ .home-section {
