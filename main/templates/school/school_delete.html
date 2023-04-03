@@ -1,0 +1,14 @@
+{% extends '_base.html' %}
+{% block content %}
+    <div class="-fluid">
+        <div class="card p-5">
+            Are you sure you want to Delete {{ school }}
+
+            <form action="" class="m-2" method="POST">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Yes, delete.">
+                <a href="{% url 'school' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

@@ -36,15 +36,6 @@ class Subject(models.Model):
         return f'{self.name}'
 
 
-class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    designation = models.CharField(max_length=30)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.user.username
-
-
 class Classes(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=30)
@@ -58,12 +49,28 @@ class Schools(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=30, unique=True)
     classes = models.ManyToManyField(Classes, through='SchoolClasses')
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.name}'
 
-    def get_absolute_url(self):
+    def get_form_url(self):
         return reverse('school_update', args=[str(self.id)])
+
+    def get_delete_url(self):
+        return reverse('school_delete', args=[str(self.id)])
+
+    def get_absolute_url(self):
+        return reverse('school_detail', args=[str(self.id)])
+
+
+class Employee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    designation = models.ForeignKey(Schools, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class SchoolClasses(models.Model):

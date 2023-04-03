@@ -1,17 +1,45 @@
 {% extends '_base.html' %}
 {% block content %}
-    <h2>Schools</h2>
-    <div class="container-fulid">
+    <div class="container-fluid">
+        <h2>All Registered Schools</h2>
         <div class="row mx-auto d-flex  justify-content-start">
             <div class="col-4">
-                <div class="card card--custom rounded p-5 mb-3">
-
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th> Name</th>
+                        <th>Classes</th>
+                        <th>Teaches</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {% for school in schools %}
-                        <li>
-                            <a href="{{ school.get_absolute_url }}">{{ school.name }}</a>
-                        </li>
+                        {% if school.active is True %}
+
+                            <tr>
+                                <td>
+                                    {{ school.name }}
+                                </td>
+                                <td>{% for class  in school.classes.all %} {{ class }} {% endfor %}</td>
+                                <td>
+                                    <span class="text-info">Teachers</span>
+                                </td>
+                                <td>
+                                    <a class="link-primary" href="{{ school.get_form_url }}"> Edit</a>
+                                </td>
+                                <td>
+                                    <a class="link-success" href="{{ school.get_absolute_url }}"> Details</a>
+                                </td>
+                                <td>
+                                    <a class="link-danger" href="{{ school.get_delete_url }}">Delete </a>
+                                </td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
-                </div>
+                    </tbody>
+                </table>
+
             </div>
         </div>
     </div>
