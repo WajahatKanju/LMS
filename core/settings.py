@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
 
     "main.apps.MainConfig",
-    "pages.apps.PagesConfig",
 ]
 
 MIDDLEWARE = [
@@ -134,3 +133,4 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+

@@ -3,6 +3,7 @@ from datetime import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Student(models.Model):
@@ -55,11 +56,14 @@ class Classes(models.Model):
 
 class Schools(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     classes = models.ManyToManyField(Classes, through='SchoolClasses')
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('school_update', args=[str(self.id)])
 
 
 class SchoolClasses(models.Model):

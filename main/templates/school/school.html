@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% block content %}
+    <h2>Schools</h2>
+    <div class="container-fulid">
+        <div class="row mx-auto d-flex  justify-content-start">
+            <div class="col-4">
+                <div class="card card--custom rounded p-5 mb-3">
+
+                    {% for school in schools %}
+                        <li>
+                            <a href="{{ school.get_absolute_url }}">{{ school.name }}</a>
+                        </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
