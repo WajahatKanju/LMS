@@ -7,23 +7,17 @@
                 <table class="table">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th> Name</th>
-                        <th>Classes</th>
-                        <th>Teaches</th>
                         <th colspan="2">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for school in schools %}
-                        {% if school.active is True %}
-
                             <tr>
+                            <td>{{ forloop.counter }}</td>
                                 <td>
                                     {{ school.name }}
-                                </td>
-                                <td>{% for class  in school.classes.all %} {{ class }} {% endfor %}</td>
-                                <td>
-                                    <span class="text-info">Teachers</span>
                                 </td>
                                 <td>
                                     <a class="link-primary" href="{{ school.get_form_url }}"> Edit</a>
@@ -35,11 +29,15 @@
                                     <a class="link-danger" href="{{ school.get_delete_url }}">Delete </a>
                                 </td>
                             </tr>
-                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <a class="btn btn-secondary" href="{% url 'school:create' %}">Add Another</a>
             </div>
         </div>
     </div>

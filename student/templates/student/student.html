@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+{% block content %}
+    <div class="container-fluid">
+        <h2>Students</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Roll No</th>
+                    <th>admission no</th>
+                    <th>Date of Birth</th>
+                    <th>Date of admission</th>
+                    <th>Student CNIC</th>
+                    <th>Father CNIC</th>
+                    <th>Mobile No</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.roll_no }}</td>
+                    <td> {{ student.admission_no }}</td>
+                    <td>{{ student.date_of_birth }}</td>
+                    <td>{{ student.admission_date }}</td>
+                    <td>{{ student.student_cnic }}</td>
+                    <td>{{ student.father_cnic }}</td>
+                    <td>{{ student.mobile }}</td>
+                    <td><a  class="btn btn-success" href="{{  student.get_absolute_url }}">Details</a> </td>
+                    <td><a  class="btn btn-warning" href="{{  student.get_update_url }}">Edit</a> </td>
+                    <td><a  class="btn btn-danger" href="{{  student.get_delete_url }}">Delete</a> </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </thead>
+        </table>
+    </div>
+{% endblock content %}

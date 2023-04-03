@@ -7,10 +7,8 @@
                     <div class="content py-5 pt-3 text-center">
                         <h3><i class="bi bi-person"></i> Student</h3>
 
-                        <div class="m-1 btn btn-outline-primary"><i class="bi bi-person-plus"></i>Add</div>
-                        <div class="m-1 btn btn-outline-secondary"><i class="bi bi-search"></i>Search</div>
-                        <div class="m-1 btn btn-outline-warning "><i class="bi bi-pencil"></i>Edit</div>
-                        <div class="m-1 btn btn-outline-danger"><i class="bi bi-trash2"></i>Delete</div>
+                        <a href="{% url 'student:create' %}" class="m-1 btn btn-outline-primary"><i class="bi bi-person-plus"></i>Add</a>
+                        <a href="{% url 'student:all' %}" class="m-1 btn btn-outline-secondary"><i class="bi bi-search"></i>Search</a>
                     </div>
                 </div>
             </div>
@@ -44,8 +42,10 @@
                     <div class="content py-5 pt-3 text-center">
                         <h3><i class="bi bi-buildings-fill"></i> School</h3>
 
-                        <a href="{% url 'school_create' %}" class="m-1 btn btn-outline-primary"><i class="bi bi-plus"></i>Add School</a>
-                        <a href="{% url 'school' %}" class="m-1 btn btn-outline-secondary"><i class="bi bi-search"></i>List School</a>
+                        <a href="{% url 'school:create' %}" class="m-1 btn btn-outline-primary"><i
+                                class="bi bi-plus"></i>Add School</a>
+                        <a href="{% url 'school:all' %}" class="m-1 btn btn-outline-secondary"><i
+                                class="bi bi-card-list"></i>List School</a>
                     </div>
 
                 </div>
@@ -55,10 +55,10 @@
                     <div class="content py-5 pt-3 text-center">
                         <h3><i class="bi bi-c-circle-fill"></i> Class</h3>
 
-                        <div class="m-1 btn btn-outline-primary"><i class="bi bi-person-plus"></i>Add Class</div>
-                        <div class="m-1 btn btn-outline-secondary"><i class="bi bi-search"></i>List Class</div>
-                        <div class="m-1 btn btn-outline-warning"><i class="bi bi-search"></i>Edit Class</div>
-                        <div class="m-1 btn btn-outline-danger"><i class="bi bi-trash2"></i>Delete Class</div>
+                        <a href="{% url 'school:class_create' %}" class="m-1 btn btn-outline-primary"><i
+                                class="bi bi-person-plus"></i>Add Class</a>
+                        <a href="{% url 'school:class' %}" class="m-1 btn btn-outline-secondary"><i
+                                class="bi bi-search"></i>List Class</a>
                     </div>
 
                 </div>
