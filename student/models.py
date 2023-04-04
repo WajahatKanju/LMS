@@ -36,3 +36,8 @@ class Position(models.Model):
 class StudentClass(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     grade = models.ForeignKey('school.SchoolClasses', on_delete=models.CASCADE)
+
+
+class StudentSchool(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    school = models.ForeignKey('school.Schools', on_delete=models.CASCADE)

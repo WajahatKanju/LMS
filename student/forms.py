@@ -1,27 +1,56 @@
 from django import forms
-from django.core.exceptions import ValidationError
 
-from .models import Student
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Row, Column
+from crispy_forms.layout import Submit, Row, Column, Layout
+from betterforms.multiform import MultiModelForm
+
+from .models import Student, StudentClass, StudentSchool
 
 
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['roll_no', 'name', 'date_of_birth', 'admission_no', 'admission_date',
-                  'student_cnic', 'father_cnic', 'mobile']
+        fields = ['roll_no', 'name', 'date_of_birth', 'admission_no', 'admission_date', 'student_cnic', 'father_cnic',
+                  'mobile']
 
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_class = 'form-horizontal'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.label_class = 'col-lg-2'
+        self.helper.layout = Layout(Row(Column('roll_no', css_class='form-group col-md-6'),
+                                        Column('admission_no', css_class='form-group col-md-6'), ),
+                                    Row(Column('date_of_birth', css_class='form-group col-md-6'),
+                                        Column('admission_date', css_class='form-group col-md-6'), ),
+                                    Row(Column('name', css_class='form-group col-md-3'),
+                                        Column('student_cnic', css_class='form-group col-md-3'),
+                                        Column('father_cnic', css_class='form-group col-md-3'),
+                                        Column('mobile', css_class='form-group col-md-3'), ), )
 
         self.fields['date_of_birth'].widget = forms.DateInput(attrs={'type': 'date'})
         self.fields['admission_date'].widget = forms.DateInput(attrs={'type': 'date'})
 
-        submit = Submit('Submit', 'Submit')
-        self.helper.add_input(submit)
+
+class StudentSchoolForm(forms.ModelForm):
+    class Meta:
+        model = StudentSchool
+        fields = ['school']
+
+    def __init__(self, *args, **kwargs):
+        super(StudentSchoolForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(Row(Column('school', css_class='form-group col-md-6'), ), )
+
+
+class StudentClassForm(forms.ModelForm):
+    class Meta:
+        model = StudentClass
+        fields = ['grade']
+
+    def __init__(self, *args, **kwargs):
+        super(StudentClassForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(Row(Column('grade', css_class='form-group col-md-6'), ),
+                                    Submit('submit', 'Add Student', css_class='btn btn-primary'))
+
+
+class StudentRegistrationForm(MultiModelForm):
+    form_classes = {'student': StudentForm, 'school': StudentSchoolForm, 'grade': StudentClassForm}

@@ -22,3 +22,4 @@ class SettingsForm(forms.ModelForm):
                                         Column('subject_changes', css_class='form-group col-md-6'), ),
                                     Row(Column('marks_lock_changes', css_class='form-group col-md-6'), ),
                                     Submit('submit', 'Save', css_class='btn btn-primary'), )
+

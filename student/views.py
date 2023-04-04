@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from student.models import Student
-from student.forms import StudentForm
+from student.forms import StudentForm, StudentSchoolForm, StudentClassForm
 
 
 class StudentView(View):
@@ -30,7 +30,9 @@ class StudentCreateView(LoginRequiredMixin, View):
     success_url = 'student:all'
 
     context = {
-        'form': StudentForm()
+        'form': StudentForm(),
+        'school_form': StudentSchoolForm(),
+        'class_form': StudentClassForm(),
     }
 
     def get(self, request):
