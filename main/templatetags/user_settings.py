@@ -16,5 +16,5 @@ def user_school_header(user):
     except Settings.DoesNotExist:
         selected_school = 'No School Selected'
 
-    return format_html(f'<h2 class="text text-justify my-2 display-4">' \
-           f'Welcome {username } To { selected_school }</h2>')
+    return format_html(f'<h2 class="text text-justify my-2 display-4">'
+                       f'Welcome {username} To {selected_school}</h2>')

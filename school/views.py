@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
@@ -31,7 +32,7 @@ class SchoolDetailView(View):
         return render(request, self.template_name, self.context)
 
 
-class SchoolCreateView(View):
+class SchoolCreateView(LoginRequiredMixin, View):
     template_name = 'school/school_create.html'
 
     context = {}
@@ -53,7 +54,7 @@ class SchoolCreateView(View):
         return render(request, self.template_name, self.context)
 
 
-class SchoolUpdateView(View):
+class SchoolUpdateView(LoginRequiredMixin, View):
     template_name = 'school/school_create.html'
     context = {}
 
@@ -75,7 +76,7 @@ class SchoolUpdateView(View):
         return render(request, self.template_name, self.context)
 
 
-class SchoolDeleteView(View):
+class SchoolDeleteView(LoginRequiredMixin, View):
 
     template_name = 'school/school_delete.html'
     success_url = reverse_lazy('school:all')

@@ -1,9 +1,12 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SettingsForm
-from .models import Settings
+from .models import Settings, Employee
+from school.models import Schools
 
 
 class HomeView(View):
@@ -15,27 +18,41 @@ class HomeView(View):
         return render(request, self.template_name, self.context)
 
 
-class SettingsView(View):
+class SettingsView(LoginRequiredMixin, View):
     template_name = 'main/settings.html'
     success_url = reverse_lazy('settings')
 
     # form_class = SettingsForm()
     context = {'form': SettingsForm(), 'errors': [], }
+    user = None
 
     def get(self, request):
-        setting = Settings.objects.get(employee__user_id__exact=self.request.user.id)
-        form = SettingsForm(instance=setting)
+        try:
+            setting = Settings.objects.get(employee__user_id__exact=self.request.user.id)
+            form = SettingsForm(instance=setting)
+        except Settings.DoesNotExist:
+            form = SettingsForm()
         self.context['form'] = form
         print(self.request.user.id)
         return render(request, self.template_name, self.context)
 
     def post(self, request, ):
-        setting = Settings.objects.get(employee__user_id__exact=self.request.user.id)
-        form = SettingsForm(request.POST, instance=setting)
+        try:
+            setting = Settings.objects.get(employee__user_id__exact=self.request.user.id)
+            form = SettingsForm(request.POST, instance=setting)
+        except Settings.DoesNotExist:
+            form = SettingsForm(request.POST)
+            self.user = Employee(user=self.request.user, designation='Teacher',
+                                 school=Schools.objects.get(id=request.POST.get('selected_school')), active=True)
+            self.user.save()
+
         if form.is_valid():
-            form.save(commit=False)
-            form.employee = self.request.user
-            form.save()
+            setting = form.save(commit=False)
+            if self.user:
+                setting.employee = self.user
+            else:
+                setting.employee = Employee.objects.get(user=self.request.user)
+            setting.save()
 
             return redirect(self.success_url)
 

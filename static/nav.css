@@ -234,6 +234,14 @@
 .sidebar .profile-details .job {
     font-size: 12px;
 }
+.sidebar .account-authentication{
+    position: fixed;
+    bottom: 0;
+    width: 78px;
+    background: #f3f1f6;
+    padding: 12px 0;
+    transition: all 0.5s ease;
+}
 
 /* HOME SECTION */
 

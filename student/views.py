@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from student.models import Student
 from student.forms import StudentForm
@@ -24,7 +25,7 @@ class StudentDetailView(View):
         return render(request, self.template_name, {'pk': pk})
 
 
-class StudentCreateView(View):
+class StudentCreateView(LoginRequiredMixin, View):
     template_name = 'student/student_form.html'
     success_url = 'student:all'
 
@@ -42,14 +43,14 @@ class StudentCreateView(View):
             return redirect(self.success_url)
 
 
-class StudentUpdateView(View):
+class StudentUpdateView(LoginRequiredMixin, View):
     template_name = 'student/student_form.html'
 
     def get(self, request, pk):
         return render(request, self.template_name, {'pk': pk})
 
 
-class StudentDeleteView(View):
+class StudentDeleteView(LoginRequiredMixin, View):
     template_name = 'student/student_delete.html'
 
     def get(self, request, pk):

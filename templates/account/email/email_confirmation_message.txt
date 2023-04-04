@@ -1,0 +1,16 @@
+{% load account %}
+{% user_display user as user_display %}
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+
+Hi {{ user_display }}!
+Your account has been successfully created.
+
+To get you started, please click on the link below to confirm your email address
+{{ activate_url }}
+If you didn’t submit your email address to create an account on {{ site_domain }} please ignore this message.
+{% endblocktrans %}{% endautoescape %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+Regards,
+{{ site_name }} support team
+{% endblocktrans %}

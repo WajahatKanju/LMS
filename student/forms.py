@@ -7,10 +7,10 @@ from crispy_forms.layout import Submit, Row, Column
 
 
 class StudentForm(forms.ModelForm):
-
     class Meta:
         model = Student
-        fields = ['roll_no', 'name', 'date_of_birth', 'admission_no', 'admission_date', 'student_cnic', 'father_cnic', 'mobile']
+        fields = ['roll_no', 'name', 'date_of_birth', 'admission_no', 'admission_date',
+                  'student_cnic', 'father_cnic', 'mobile']
 
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)

@@ -79,17 +79,41 @@
                     </li>
                 {% endif %}
             {% endif %}
-            <li>
-                <div class="profile-details">
-                    <div class="profile-content">
+            {% if user.is_authenticated %}
+                <li>
+                    <div class="profile-details">
+                        <div class="profile-content">
+                        </div>
+                        <div class="name-job">
+                            <div class="profile_name">Wajahat Ahmad</div>
+                            <div class="job">Software Engineer</div>
+                        </div>
+                        <a href="{% url 'account_logout' %}"><i class='bx bx-log-out'></i></a>
+
                     </div>
-                    <div class="name-job">
-                        <div class="profile_name">Wajahat Ahmad</div>
-                        <div class="job">Software Engineer</div>
-                    </div>
-                    <i class='bx bx-log-out'></i>
+                </li>
+            {% else %}
+                <div class="account-authentication">
+                    <li>
+                        <a href="{% url 'account_signup' %}">
+                           <i class='bx bx-log-in'></i>
+                            <span class="link_name">Signup</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link_name" href="{% url 'account_signup' %}">Signup</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{% url 'account_login' %}">
+                            <i class='bx bx-log-in-circle'></i>
+                            <span class="link_name">Login</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link_name" href="{% url 'account_login' %}">Login</a></li>
+                        </ul>
+                    </li>
                 </div>
-            </li>
+            {% endif %}
         </ul>
     </div>
 
@@ -110,7 +134,8 @@
             <div class="text-center">
                 {% user_school_header request.user %}
             </div>
-            <a {% if request.path == '/' %} style="display: none;" {% endif %} href="javascript:void(0);" onclick="javascript:history.go(-1);" class="btn btn-outline-danger mb-5">
+            <a {% if request.path == '/' %} style="display: none;" {% endif %} href="javascript:void(0);"
+                                            onclick="history.go(-1);" class="btn btn-outline-danger mb-5">
                 <i class="bi bi-arrow-left m-0" aria-hidden="false"></i> Back
             </a>
             {% block content %}
