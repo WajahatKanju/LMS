@@ -1,56 +1,36 @@
 from django import forms
-
-from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Row, Column, Layout
-from betterforms.multiform import MultiModelForm
-
-from .models import Student, StudentClass, StudentSchool
-
+from crispy_forms.bootstrap import FormActions
+from crispy_forms.helper import FormHelper
+from school.models import Schools, SchoolClasses
+from .models import Student
+from django.core.exceptions import ValidationError
 
 class StudentForm(forms.ModelForm):
+    school = forms.ModelChoiceField(queryset=Schools.objects.all(), label='School')
+    grade = forms.ModelChoiceField(queryset=SchoolClasses.objects.all(), label='Grade')
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='Date of birth')
+    admission_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='Admission date')
+
     class Meta:
         model = Student
         fields = ['roll_no', 'name', 'date_of_birth', 'admission_no', 'admission_date', 'student_cnic', 'father_cnic',
-                  'mobile']
+                  'mobile', 'grade', 'school']
 
     def __init__(self, *args, **kwargs):
-        super(StudentForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.layout = Layout(Row(Column('roll_no', css_class='form-group col-md-6'),
-                                        Column('admission_no', css_class='form-group col-md-6'), ),
-                                    Row(Column('date_of_birth', css_class='form-group col-md-6'),
-                                        Column('admission_date', css_class='form-group col-md-6'), ),
-                                    Row(Column('name', css_class='form-group col-md-3'),
-                                        Column('student_cnic', css_class='form-group col-md-3'),
-                                        Column('father_cnic', css_class='form-group col-md-3'),
-                                        Column('mobile', css_class='form-group col-md-3'), ), )
+        self.helper.layout = Layout(
+            Row(Column('roll_no', css_class='col-md-6'), Column('admission_no', css_class='col-md-6'), ),
+            Row(Column('date_of_birth', css_class='col-md-6'), Column('admission_date', css_class='col-md-6'), ),
+            Row(Column('name', css_class='col-md-3'), Column('student_cnic', css_class='col-md-3'),
+                Column('father_cnic', css_class='col-md-3'), Column('mobile', css_class='col-md-3'), ),
+            Row(Column('school', css_class='col-md-6'), Column('grade', css_class='col-md-6'), ),
+            FormActions(Submit('submit', 'Add Student', css_class='btn-primary'), ), )
 
-        self.fields['date_of_birth'].widget = forms.DateInput(attrs={'type': 'date'})
-        self.fields['admission_date'].widget = forms.DateInput(attrs={'type': 'date'})
-
-
-class StudentSchoolForm(forms.ModelForm):
-    class Meta:
-        model = StudentSchool
-        fields = ['school']
-
-    def __init__(self, *args, **kwargs):
-        super(StudentSchoolForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(Row(Column('school', css_class='form-group col-md-6'), ), )
-
-
-class StudentClassForm(forms.ModelForm):
-    class Meta:
-        model = StudentClass
-        fields = ['grade']
-
-    def __init__(self, *args, **kwargs):
-        super(StudentClassForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(Row(Column('grade', css_class='form-group col-md-6'), ),
-                                    Submit('submit', 'Add Student', css_class='btn btn-primary'))
-
-
-class StudentRegistrationForm(MultiModelForm):
-    form_classes = {'student': StudentForm, 'school': StudentSchoolForm, 'grade': StudentClassForm}
+    def clean_grade(self):
+        grade = self.cleaned_data['grade']
+        print('clean_grade method called. grade:', grade)
+        if grade not in SchoolClasses.objects.all():
+            raise forms.ValidationError("Please select a valid grade.")
+        return grade

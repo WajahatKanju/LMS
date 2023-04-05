@@ -8,6 +8,9 @@ from .forms import SettingsForm
 from .models import Settings, Employee
 from school.models import Schools
 
+from django.http import JsonResponse
+from school.models import SchoolClasses
+
 
 class HomeView(View):
     template_name = 'main/index.html'
@@ -58,3 +61,9 @@ class SettingsView(LoginRequiredMixin, View):
 
         self.context['errors'].append({'type': 'error Type', 'message': 'Invalid'})
         return redirect(self.success_url)
+
+
+def get_grades(request, school_id):
+    grades = SchoolClasses.objects.filter(school_id=school_id).values('id', 'classes', 'classes__name')
+    grades_dict = {grade['id']: {'id': grade['classes'], 'name': grade['classes__name']} for grade in grades}
+    return JsonResponse(grades_dict)

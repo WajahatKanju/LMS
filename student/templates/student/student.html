@@ -13,6 +13,7 @@
                     <th>Date of admission</th>
                     <th>Student CNIC</th>
                     <th>Father CNIC</th>
+                    <th>class</th>
                     <th>Mobile No</th>
                     <th>Actions</th>
                 </tr>
@@ -28,6 +29,7 @@
                     <td>{{ student.admission_date }}</td>
                     <td>{{ student.student_cnic }}</td>
                     <td>{{ student.father_cnic }}</td>
+                    <td>{{ student.grade }}</td>
                     <td>{{ student.mobile }}</td>
                     <td><a  class="btn btn-success" href="{{  student.get_absolute_url }}">Details</a> </td>
                     <td><a  class="btn btn-warning" href="{{  student.get_update_url }}">Edit</a> </td>

@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from student.models import Student
-from student.forms import StudentForm, StudentSchoolForm, StudentClassForm
+from student.forms import StudentForm
 
 
 class StudentView(View):
@@ -29,20 +29,18 @@ class StudentCreateView(LoginRequiredMixin, View):
     template_name = 'student/student_form.html'
     success_url = 'student:all'
 
-    context = {
-        'form': StudentForm(),
-        'school_form': StudentSchoolForm(),
-        'class_form': StudentClassForm(),
-    }
-
     def get(self, request):
-        return render(request, self.template_name, self.context)
+        form = StudentForm(prefix='student')
+        context = {'form': form}
+        return render(request, self.template_name, context)
 
     def post(self, request):
-        form = StudentForm(request.POST)
+        form = StudentForm(request.POST, prefix='student')
         if form.is_valid():
             form.save()
             return redirect(self.success_url)
+        context = {'form': form}
+        return render(request, self.template_name, context)
 
 
 class StudentUpdateView(LoginRequiredMixin, View):

@@ -3,11 +3,39 @@
 {% block content %}
     <div class="container-fluid">
         <h4>Add New Student</h4>
-        <form method="post">
-            {% csrf_token %}
-            {% crispy form %}
-            {% crispy school_form %}
-            {% crispy class_form %}
-        </form>
+        {% crispy form %}
     </div>
 {% endblock content %}
+
+
+{% block javascript %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const schoolField = document.querySelector('#id_student-school');
+            const gradeField = document.querySelector('#id_student-grade');
+
+            schoolField.addEventListener('change', () => {
+                const schoolId = schoolField.value;
+                if (schoolId) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                            const grades = JSON.parse(this.responseText);
+                            gradeField.innerHTML = '';
+                            for (const key in grades) {
+                                if (grades.hasOwnProperty(key)) {
+                                    const option = document.createElement('option');
+                                    option.text = grades[key].name;
+                                    option.value = key;
+                                    gradeField.add(option);
+                                }
+                            }
+                        }
+                    };
+                    xhr.open('GET', `/get-grades/${schoolId}/`, true);
+                    xhr.send();
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}

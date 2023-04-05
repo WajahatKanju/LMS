@@ -12,6 +12,7 @@ class Student(models.Model):
     admission_date = models.DateField(default=datetime.now)
     student_cnic = models.CharField(max_length=15)
     father_cnic = models.CharField(max_length=15)
+    grade = models.ForeignKey('school.SchoolClasses', on_delete=models.CASCADE, null=True, blank=True)
     mobile = models.CharField(max_length=12)
     active = models.BooleanField(default=True)
 

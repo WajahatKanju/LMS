@@ -9,4 +9,8 @@ urlpatterns = [
     path('<int:pk>/', StudentDetailView.as_view(), name='detail'),
     path('<int:pk>/update/', StudentUpdateView.as_view(), name='update'),
     path('<int:pk>/delete/', StudentDeleteView.as_view(), name='delete'),
+
+
 ]
+
+

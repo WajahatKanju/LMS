@@ -9,6 +9,7 @@ from .forms import SchoolForm
 from .models import Schools
 
 
+
 # Create your views here.
 class SchoolView(ListView):
     template_name = 'school/school.html'
@@ -95,3 +96,5 @@ class SchoolDeleteView(LoginRequiredMixin, View):
         messages.success(request, 'Form submission successful')
 
         return redirect(self.success_url)
+
+
