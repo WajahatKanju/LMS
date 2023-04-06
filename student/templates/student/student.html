@@ -1,43 +1,144 @@
 {% extends '_base.html' %}
+
 {% block content %}
     <div class="container-fluid">
         <h2>Students</h2>
-        <table class="table">
+        <form method="get" action="">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="school">Filter by School</label>
+                    <select id="school" name="school" class="form-control">
+                        <option value="all">All Schools</option>
+                        {% for school in schools %}
+                            <option value="{{ school.id }}"
+                                    {% if selected_school == school.id %}selected{% endif %}>{{ school.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="class">Filter by Class</label>
+                    <select id="class" name="class" class="form-control">
+                        <option value="">All Classes</option>
+                        {% for class_obj in classes %}
+                            <option value="{{ class_obj.id }}"
+                                    {% if selected_class == class_obj.id %}selected{% endif %}>{{ class_obj.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <button type="submit" id="filter" class="btn btn-primary mt-4">Apply Filters</button>
+                </div>
+            </div>
+        </form>
+        <table class="table table-striped table-hover table-bordered border-secondary">
             <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Roll No</th>
-                    <th>admission no</th>
-                    <th>Date of Birth</th>
-                    <th>Date of admission</th>
-                    <th>Student CNIC</th>
-                    <th>Father CNIC</th>
-                    <th>class</th>
-                    <th>Mobile No</th>
-                    <th>Actions</th>
-                </tr>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Admission No</th>
+                <th>Date of Birth</th>
+                <th>Date of Admission</th>
+                <th>Student CNIC</th>
+                <th>Father CNIC</th>
+                <th>Class</th>
+                <th>Mobile No</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody>
             {% for student in students %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.roll_no }}</td>
-                    <td> {{ student.admission_no }}</td>
-                    <td>{{ student.date_of_birth }}</td>
-                    <td>{{ student.admission_date }}</td>
-                    <td>{{ student.student_cnic }}</td>
-                    <td>{{ student.father_cnic }}</td>
-                    <td>{{ student.grade }}</td>
-                    <td>{{ student.mobile }}</td>
-                    <td><a  class="btn btn-success" href="{{  student.get_absolute_url }}">Details</a> </td>
-                    <td><a  class="btn btn-warning" href="{{  student.get_update_url }}">Edit</a> </td>
-                    <td><a  class="btn btn-danger" href="{{  student.get_delete_url }}">Delete</a> </td>
+                    <td data-label="#">{{ forloop.counter }}</td>
+                    <td data-label="Name">{{ student.name }}</td>
+                    <td data-label="Roll No">{{ student.roll_no }}</td>
+                    <td data-label="Admission No">{{ student.admission_no }}</td>
+                    <td data-label="Date of Birth">{{ student.date_of_birth }}</td>
+                    <td data-label="Date of Admission">{{ student.admission_date }}</td>
+                    <td data-label="Student CNIC">{{ student.student_cnic }}</td>
+                    <td data-label="Father CNIC">{{ student.father_cnic }}</td>
+                    <td data-label="Class">{{ student.grade }}</td>
+                    <td data-label="Mobile No">{{ student.mobile }}</td>
+                    <td data-label="Actions">
+                        <a class="btn btn-success" href="{{ student.get_absolute_url }}">Details</a>
+                        <a class="btn btn-warning" href="{{ student.get_update_url }}">Edit</a>
+                        <a class="btn btn-danger" href="{{ student.get_delete_url }}">Delete</a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
-            </thead>
         </table>
     </div>
-{% endblock content %}
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const schoolField = document.querySelector('#school');
+            const gradeField = document.querySelector('#class');
+
+            schoolField.addEventListener('change', () => {
+                const schoolId = schoolField.value;
+                if (schoolId) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                            const grades = JSON.parse(this.responseText);
+                            gradeField.innerHTML = '';
+                            for (const key in grades) {
+                                if (grades.hasOwnProperty(key)) {
+                                    const option = document.createElement('option');
+                                    option.text = grades[key].name;
+                                    option.value = grades[key].id;
+                                    gradeField.add(option);
+                                }
+                            }
+                        }
+                    };
+                    xhr.open('GET', `/get-grades/${schoolId}/`, true);
+                    xhr.send();
+                }
+            });
+        });
+
+        function saveFilters(schoolId, classId) {
+            localStorage.setItem('schoolId', schoolId);
+            localStorage.setItem('classId', classId);
+        }
+
+        // Load school and class filters from local storage
+        function loadFilters() {
+            const schoolId = localStorage.getItem('schoolId');
+            const classId = localStorage.getItem('classId');
+            if (schoolId) {
+                document.querySelector('#school').value = schoolId;
+            }
+            if (classId) {
+                document.querySelector('#class').value = classId;
+            }
+        }
+
+        // Attach event listener to school and class filters
+        document.querySelector('#school').addEventListener('change', function () {
+            let schoolId = this.value;
+            const classId = document.querySelector('#class').value;
+            saveFilters(schoolId, classId);
+            document.getElementById("filter").click();
+        });
+
+        document.querySelector('#class').addEventListener('change', function () {
+            let schoolId = document.querySelector('#school').value;
+            const classId = this.value;
+            saveFilters(schoolId, classId);
+            document.getElementById("filter").click();
+        });
+
+        // Load filters on page load
+        window.addEventListener('load', function () {
+            loadFilters();
+
+        });
+    </script>
+
+{% endblock javascript %}

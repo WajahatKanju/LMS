@@ -13,6 +13,49 @@
         document.addEventListener('DOMContentLoaded', () => {
             const schoolField = document.querySelector('#id_student-school');
             const gradeField = document.querySelector('#id_student-grade');
+            const rollNo = document.getElementById("id_student-roll_no");
+            const admissionNo = document.getElementById("id_student-admission_no");
+            const studentCnic = document.getElementById("id_student-student_cnic");
+            const fatherCnic = document.getElementById("id_student-father_cnic")
+            const mobile = document.getElementById("id_student-mobile")
+
+            studentCnic.value = '15604-'
+            fatherCnic.value = '15604-'
+            mobile.value = '0333-'
+
+            function numericStringMask(str, mask) {
+                if (!mask) return str;
+
+                const numeric = str.replaceAll(/[^\d]/g, '');
+
+                let idx = 0;
+
+                const formated = mask.split('').map(el => {
+                    if (el === '#') {
+                        el = numeric[idx];
+                        idx++;
+                    }
+                    return el;
+                });
+
+                return formated.join('');
+            }
+
+            const cnicFields = [studentCnic, fatherCnic];
+            cnicFields.forEach(function (inputField) {
+                inputField.addEventListener("input", function (event) {
+                    // Get the current value of the input field
+                    inputField.value = numericStringMask(inputField.value, '#####-#######-#');
+                });
+            });
+            mobile.addEventListener('input', function(event){
+                mobile.value = numericStringMask(mobile.value, '####-#######')
+            })
+
+
+            rollNo.addEventListener("input", function () {
+                admissionNo.value = rollNo.value;
+            });
 
             schoolField.addEventListener('change', () => {
                 const schoolId = schoolField.value;

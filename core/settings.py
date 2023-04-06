@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    'betterforms',
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -50,6 +49,7 @@ INSTALLED_APPS = [
     "main.apps.MainConfig",
     'student.apps.StudentConfig',
     'school.apps.SchoolConfig',
+    'examination.apps.ExaminationConfig',
 ]
 
 MIDDLEWARE = [

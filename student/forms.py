@@ -6,11 +6,14 @@ from school.models import Schools, SchoolClasses
 from .models import Student
 from django.core.exceptions import ValidationError
 
+
 class StudentForm(forms.ModelForm):
     school = forms.ModelChoiceField(queryset=Schools.objects.all(), label='School')
     grade = forms.ModelChoiceField(queryset=SchoolClasses.objects.all(), label='Grade')
-    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='Date of birth')
-    admission_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='Admission date')
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='Date of birth',
+                                    initial='1900-01-01', required=False)
+    admission_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='Admission date',
+                                     initial='1900-01-01', required=False)
 
     class Meta:
         model = Student

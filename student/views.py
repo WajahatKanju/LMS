@@ -4,18 +4,46 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from student.models import Student
 from student.forms import StudentForm
+from school.models import Schools, Classes
+from main.models import Settings
 
 
 class StudentView(View):
     template_name = 'student/student.html'
 
-    context = {
-
-    }
-
     def get(self, request):
-        self.context['students'] = Student.objects.filter(active=True)
-        return render(request, self.template_name, self.context)
+        schools = Schools.objects.all()
+        classes = Classes.objects.all()
+
+        school_id = request.GET.get('school')
+        if school_id is None:
+            try:
+                setting = Settings.objects.get(employee__user_id__exact=self.request.user.id)
+                school_id = setting.selected_school.id
+            except Settings.DoesNotExist:
+                school_id = request.GET.get('school')
+
+        if school_id == 'all':
+            school_id = None
+
+        print(school_id)
+        class_id = request.GET.get('class')
+
+        if school_id and class_id:
+            students = Student.objects.filter(grade__school_id=school_id, grade__classes_id=class_id)
+        elif school_id:
+            students = Student.objects.filter(grade__school_id=school_id)
+        elif class_id:
+            print(f'class id => {class_id}')
+            students = Student.objects.filter(grade__classes_id=class_id)
+        else:
+            students = Student.objects.filter(active=True)
+
+        context = {'students': students, 'schools': schools, 'classes': classes,
+                   'selected_school': school_id if school_id else None,
+                   'selected_class': class_id if class_id else None, }
+
+        return render(request, self.template_name, context)
 
 
 class StudentDetailView(View):

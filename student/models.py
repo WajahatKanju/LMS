@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import unique
 
 from django.db import models
 from django.urls import reverse
@@ -8,9 +9,9 @@ class Student(models.Model):
     roll_no = models.IntegerField(editable=True, blank=False, primary_key=True)
     name = models.CharField(max_length=30)
     date_of_birth = models.DateField(default='1900-01-01', blank=True)
-    admission_no = models.IntegerField(default=roll_no)
+    admission_no = models.IntegerField(default=roll_no, unique=True)
     admission_date = models.DateField(default=datetime.now)
-    student_cnic = models.CharField(max_length=15)
+    student_cnic = models.CharField(max_length=15, unique=True)
     father_cnic = models.CharField(max_length=15)
     grade = models.ForeignKey('school.SchoolClasses', on_delete=models.CASCADE, null=True, blank=True)
     mobile = models.CharField(max_length=12)
@@ -37,8 +38,3 @@ class Position(models.Model):
 class StudentClass(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     grade = models.ForeignKey('school.SchoolClasses', on_delete=models.CASCADE)
-
-
-class StudentSchool(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    school = models.ForeignKey('school.Schools', on_delete=models.CASCADE)
