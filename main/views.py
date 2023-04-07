@@ -64,6 +64,8 @@ class SettingsView(LoginRequiredMixin, View):
 
 
 def get_grades(request, school_id):
-    grades = SchoolClasses.objects.filter(school_id=school_id).values('id', 'classes', 'classes__name')
-    grades_dict = {grade['id']: {'id': grade['classes'], 'name': grade['classes__name']} for grade in grades}
+    grades = SchoolClasses.objects.filter(school_id=school_id).values('id', 'classes', 'classes__name', 'school__name')
+    grades_dict = {grade['id']: {'id': grade['classes'], 'name': (grade['classes__name'] + " - " + grade['school__name'])} for
+                   grade in grades}
+    print(f'grades dict {grades_dict}')
     return JsonResponse(grades_dict)

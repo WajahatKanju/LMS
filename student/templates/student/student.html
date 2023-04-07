@@ -5,7 +5,7 @@
         <h2>Students</h2>
         <form method="get" action="">
             <div class="row">
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="school">Filter by School</label>
                     <select id="school" name="school" class="form-control">
                         <option value="all">All Schools</option>
@@ -15,7 +15,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <label for="class">Filter by Class</label>
                     <select id="class" name="class" class="form-control">
                         <option value="">All Classes</option>
@@ -25,16 +25,31 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
+                    <label for="gender">Filter by Gender</label>
+                    <select id="gender" name="gender" class="form-control">
+                        <option value="all">All Genders</option>
+                        <option value="Male" {% if selected_gender == "Male" %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if selected_gender == "Female" %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="search">Search</label>
+                    <input id="search" name="search" type="text" class="form-control" placeholder="Search...">
+                </div>
+                <div class="col-md-3 mb-3">
                     <button type="submit" id="filter" class="btn btn-primary mt-4">Apply Filters</button>
                 </div>
             </div>
+
         </form>
         <table class="table table-striped table-hover table-bordered border-secondary">
             <thead>
             <tr>
                 <th>#</th>
                 <th>Name</th>
+                <th>Father Name</th>
+                <th>Gender</th>
                 <th>Roll No</th>
                 <th>Admission No</th>
                 <th>Date of Birth</th>
@@ -43,27 +58,32 @@
                 <th>Father CNIC</th>
                 <th>Class</th>
                 <th>Mobile No</th>
+                <th>Active</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             {% for student in students %}
-                <tr>
-                    <td data-label="#">{{ forloop.counter }}</td>
-                    <td data-label="Name">{{ student.name }}</td>
-                    <td data-label="Roll No">{{ student.roll_no }}</td>
-                    <td data-label="Admission No">{{ student.admission_no }}</td>
-                    <td data-label="Date of Birth">{{ student.date_of_birth }}</td>
-                    <td data-label="Date of Admission">{{ student.admission_date }}</td>
-                    <td data-label="Student CNIC">{{ student.student_cnic }}</td>
-                    <td data-label="Father CNIC">{{ student.father_cnic }}</td>
-                    <td data-label="Class">{{ student.grade }}</td>
-                    <td data-label="Mobile No">{{ student.mobile }}</td>
-                    <td data-label="Actions">
-                        <a class="btn btn-success" href="{{ student.get_absolute_url }}">Details</a>
-                        <a class="btn btn-warning" href="{{ student.get_update_url }}">Edit</a>
+                <td data-label="#">{{ forloop.counter }}</td>
+                <td data-label="Name">{{ student.name }}</td>
+                <td data-label="Father Name">{{ student.father_name }}</td>
+                <td data-label="Gender">{{ student.gender }}</td>
+                <td data-label="Roll No">{{ student.roll_no }}</td>
+                <td data-label="Admission No">{{ student.admission_no }}</td>
+                <td data-label="Date of Birth">{{ student.date_of_birth }}</td>
+                <td data-label="Date of Admission">{{ student.admission_date }}</td>
+                <td data-label="Student CNIC">{{ student.student_cnic }}</td>
+                <td data-label="Father CNIC">{{ student.father_cnic }}</td>
+                <td data-label="Class">{{ student.grade }}</td>
+                <td data-label="Mobile No">{{ student.mobile }}</td>
+                <td data-label="Active">{{ student.active }}</td>
+                <td data-label="Actions">
+                    <a class="btn btn-success" href="{{ student.get_absolute_url }}">Details</a>
+                    <a class="btn btn-warning" href="{{ student.get_update_url }}">Edit</a>
+                    {% if student.status == 'Active' or student.status == 'A' %}
                         <a class="btn btn-danger" href="{{ student.get_delete_url }}">Delete</a>
-                    </td>
+                    {% endif %}
+                </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -102,38 +122,51 @@
             });
         });
 
-        function saveFilters(schoolId, classId) {
+        function saveFilters(schoolId, classId, gender) {
             localStorage.setItem('schoolId', schoolId);
-            localStorage.setItem('classId', classId);
+            localStorage.setItem('classId', classId)
+            localStorage.setItem('gender', gender)
         }
 
         // Load school and class filters from local storage
         function loadFilters() {
             const schoolId = localStorage.getItem('schoolId');
             const classId = localStorage.getItem('classId');
+            const gender = localStorage.getItem('gender');
             if (schoolId) {
                 document.querySelector('#school').value = schoolId;
             }
             if (classId) {
                 document.querySelector('#class').value = classId;
             }
+            if (gender) {
+                document.querySelector('#gender').value = gender;
+            }
         }
 
         // Attach event listener to school and class filters
         document.querySelector('#school').addEventListener('change', function () {
-            let schoolId = this.value;
+            const gender = document.querySelector('#gender').value;
             const classId = document.querySelector('#class').value;
-            saveFilters(schoolId, classId);
+            let schoolId = this.value;
+            saveFilters(schoolId, classId, gender);
             document.getElementById("filter").click();
         });
 
         document.querySelector('#class').addEventListener('change', function () {
+            const gender = document.querySelector('#gender').value;
             let schoolId = document.querySelector('#school').value;
             const classId = this.value;
-            saveFilters(schoolId, classId);
+            saveFilters(schoolId, classId, gender);
             document.getElementById("filter").click();
         });
-
+        document.querySelector('#gender').addEventListener('change', function () {
+            const gender = document.querySelector('#gender').value;
+            const schoolId = document.querySelector('#school').value;
+            const classId = document.querySelector('#class').value;
+            saveFilters(schoolId, classId, gender);
+            document.getElementById("filter").click();
+        });
         // Load filters on page load
         window.addEventListener('load', function () {
             loadFilters();

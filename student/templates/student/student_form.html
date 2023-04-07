@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="container-fluid">
-        <h4>Add New Student</h4>
+        <h4>{{ form_title }}</h4>
         {% crispy form %}
     </div>
 {% endblock content %}
@@ -22,6 +22,24 @@
             studentCnic.value = '15604-'
             fatherCnic.value = '15604-'
             mobile.value = '0333-'
+
+
+            // add event listener to roll_no field
+            rollNo.addEventListener("input", function () {
+                // check if the input value is less than or equal to 0
+                if (this.value <= 0) {
+                    this.value = 1; // clear the input value
+                }
+            });
+
+            // add event listener to admission_no field
+            admissionNo.addEventListener("input", function () {
+                // check if the input value is less than or equal to 0
+                if (this.value <= 0) {
+                    this.value = 1; // clear the input value
+
+                }
+            });
 
             function numericStringMask(str, mask) {
                 if (!mask) return str;
@@ -46,9 +64,12 @@
                 inputField.addEventListener("input", function (event) {
                     // Get the current value of the input field
                     inputField.value = numericStringMask(inputField.value, '#####-#######-#');
+                    if (inputField.value.length === 14) {
+                        inputField.value = numericStringMask(inputField.value, '#-###########-#');
+                    }
                 });
             });
-            mobile.addEventListener('input', function(event){
+            mobile.addEventListener('input', function (event) {
                 mobile.value = numericStringMask(mobile.value, '####-#######')
             })
 
@@ -79,6 +100,49 @@
                     xhr.send();
                 }
             });
+
+
+        });
+
+        function saveFilters(schoolId, classId) {
+            localStorage.setItem('schoolId', schoolId);
+            localStorage.setItem('classId', classId);
+        }
+
+        // Load school and class filters from local storage
+        function loadFilters() {
+            const schoolId = localStorage.getItem('schoolId');
+            const classId = localStorage.getItem('classId');
+            if (schoolId) {
+                document.querySelector('#id_student-school').value = schoolId;
+            }
+            if (classId) {
+                document.querySelector('#id_student-grade').value = classId;
+            }
+        }
+
+        // Attach event listener to school and class filters
+        document.querySelector('#id_student-school').addEventListener('change', function () {
+            let schoolId = this.value;
+            const classId = document.querySelector('#id_student-grade').value;
+            saveFilters(schoolId, classId);
+            setTimeout(() => {
+                let schoolId = this.value;
+                const classId = document.querySelector('#id_student-grade').value;
+                saveFilters(schoolId, classId);
+            }, 1000)
+        });
+
+        document.querySelector('#id_student-grade').addEventListener('change', function () {
+            let schoolId = document.querySelector('#id_student-school').value;
+            const classId = this.value;
+            saveFilters(schoolId, classId);
+        });
+
+        // Load filters on page load
+        window.addEventListener('load', function () {
+            loadFilters();
+
         });
     </script>
 {% endblock javascript %}
