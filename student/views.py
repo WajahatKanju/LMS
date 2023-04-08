@@ -8,7 +8,8 @@ from django.db.models import Q
 
 from student.models import Student
 from student.forms import StudentForm
-from school.models import Schools, Classes
+from school.models import Schools
+from Class.models import Class
 
 
 class StudentView(View):
@@ -16,7 +17,7 @@ class StudentView(View):
 
     def get(self, request):
         schools = Schools.objects.all()
-        classes = Classes.objects.all()
+        classes = Class.objects.all()
 
         school_id = request.GET.get('school')
         gender = request.GET.get('gender')

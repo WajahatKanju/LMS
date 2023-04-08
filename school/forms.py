@@ -3,7 +3,8 @@ from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from .models import Schools, Classes
+from .models import Schools
+from Class.models import Class
 
 
 class SchoolForm(forms.ModelForm):
@@ -29,7 +30,7 @@ class SchoolForm(forms.ModelForm):
         model = Schools
         fields = ['name', 'classes', ]
 
-    classes = forms.ModelMultipleChoiceField(queryset=Classes.objects.all(), widget=forms.CheckboxSelectMultiple,
+    classes = forms.ModelMultipleChoiceField(queryset=Class.objects.all(), widget=forms.CheckboxSelectMultiple,
                                              required=False)
 
     def __init__(self, *args, **kwargs):

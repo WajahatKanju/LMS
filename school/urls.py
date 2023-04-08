@@ -12,12 +12,4 @@ urlpatterns = [
     path('<uuid:pk>/update/', SchoolUpdateView.as_view(), name='update'),
     path('<uuid:pk>/delete/', SchoolDeleteView.as_view(), name='delete'),
 
-    path('class/', SchoolView.as_view(), name='class'),
-    path('class/create', SchoolCreateView.as_view(), name='class_create'),
-
-    path('class/<uuid:pk>/', SchoolDetailView.as_view(), name='class_detail'),
-    path('class/<uuid:pk>/update/', SchoolUpdateView.as_view(), name='class_update'),
-    path('class/<uuid:pk>/delete/', SchoolDeleteView.as_view(), name='class_delete'),
-
-
 ]

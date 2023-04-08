@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Confirm Delete: {{ class_obj.name }}</h1>
+  <p>Are you sure you want to delete this class?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'class_detail' class_obj.pk %}">No, cancel</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends '_base.html' %}
+
+{% block content %}
+  <h1>Classes</h1>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for class_obj in classes %}
+          <tr>
+            <td>{{ class_obj.name }}</td>
+            <td>
+              <a class="btn btn-primary" href="{% url 'class:update' class_obj.pk %}">Edit</a>
+              <a class="btn btn-danger" href="{% url 'class:delete' class_obj.pk %}">Delete</a>
+
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">No classes found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

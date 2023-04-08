@@ -2,7 +2,8 @@ from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from school.models import Schools, Classes, SchoolClasses, ClassSubject
+from Class.models import Class
+from school.models import Schools, SchoolClasses, ClassSubject
 from main.models import Subject, Employee
 
 
@@ -25,7 +26,7 @@ class SchoolsModelTestCase(TestCase):
 
 class ClassModelTestCase(TestCase):
     def setUp(self):
-        self.classes = Classes.objects.create(name='Class 10', active=True)
+        self.classes = Class.objects.create(name='Class 10')
 
     def test_str(self):
         self.assertEqual(str(self.classes), 'Class 10')
@@ -34,7 +35,7 @@ class ClassModelTestCase(TestCase):
 class SchoolClassModelTestCase(TestCase):
     def setUp(self):
         self.school = Schools.objects.create(name='ABC School', active=True)
-        self.classes = Classes.objects.create(name='Class 10', active=True)
+        self.classes = Class.objects.create(name='Class 10')
         self.school_classes = SchoolClasses.objects.create(school=self.school, classes=self.classes, pass_percentage=50,
                                                            active=True)
 
@@ -45,7 +46,7 @@ class SchoolClassModelTestCase(TestCase):
 class ClassSubjectModelTestCase(TestCase):
     def setUp(self):
         self.school = Schools.objects.create(name='ABC School', active=True)
-        self.classes = Classes.objects.create(name='Class 10', active=True)
+        self.classes = Class.objects.create(name='Class 10')
         self.school_classes = SchoolClasses.objects.create(school=self.school, classes=self.classes, pass_percentage=50,
                                                            active=True)
         self.subject = Subject.objects.create(name='Maths', active=True)
@@ -63,7 +64,7 @@ class SchoolsViewsTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='testpass')
         self.school = Schools.objects.create(name='Test School', active=True)
-        self.classes = Classes.objects.create(name='Test Class', active=True)
+        self.classes = Class.objects.create(name='Test Class')
         self.employee = Employee.objects.create(user=self.user, designation='Teacher', school=self.school)
         self.school_class = SchoolClasses.objects.create(classes=self.classes, school=self.school, active=True)
 
@@ -92,12 +93,7 @@ class SchoolsViewsTest(TestCase):
         self.client.login(username='testuser', password='testpass')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'school/school_delete.html')
+        self.assertTemplateUsed(response,
+                                'school/school_delete.html')  #  # def test_classes_list_view(self):  #     response = self.client.get(reverse('school:class_list'))  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_list.html')  #     self.assertContains(response, self.classes.name)
 
-    #
-    def test_classes_list_view(self):
-        response = self.client.get(reverse('school:class_list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'school/class_list.html')
-        self.assertContains(response,
-                            self.classes.name)  #  # def test_classes_detail_view(self):  #     url = reverse('school:class_detail', args=[self.classes.id])  #     response = self.client.get(url)  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_detail.html')  #     self.assertContains(response, self.classes.name)  # #  # def test_classes_update_view(self):  #     url = reverse('school:class_update', args=[self.classes.id])  #     self.client.login(username='testuser', password='testpass')  #     response = self.client.get(url)  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_form.html')  #   # def test_classes_delete_view(self):  #     url = reverse('school:class_delete', args=[self.classes.id])  #     self.client.login(username='testuser', password='testpass')  #     response = self.client.get(url)  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_confirm_delete.html')  #   # def test_school_class_list_view(self):  #     response = self.client.get(reverse('school:school_class_list', args=[self.school.id]))  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/school_class_list.html')  #     self.assertContains(response, self.classes.name)
+    # def test_classes_detail_view(self):  #     url = reverse('school:class_detail', args=[self.classes.id])  #     response = self.client.get(url)  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_detail.html')  #     self.assertContains(response, self.classes.name)  # #  # def test_classes_update_view(self):  #     url = reverse('school:class_update', args=[self.classes.id])  #     self.client.login(username='testuser', password='testpass')  #     response = self.client.get(url)  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_form.html')  #  # def test_classes_delete_view(self):  #     url = reverse('school:class_delete', args=[self.classes.id])  #     self.client.login(username='testuser', password='testpass')  #     response = self.client.get(url)  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/class_confirm_delete.html')  #  # def test_school_class_list_view(self):  #     response = self.client.get(reverse('school:school_class_list', args=[self.school.id]))  #     self.assertEqual(response.status_code, 200)  #     self.assertTemplateUsed(response, 'school/school_class_list.html')  #     self.assertContains(response, self.classes.name)

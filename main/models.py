@@ -1,10 +1,6 @@
 import uuid
-from datetime import datetime
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db import models
-from django.urls import reverse
-
 
 class Subject(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
@@ -37,7 +33,7 @@ class Marks(models.Model):
 class Settings(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     selected_school = models.ForeignKey('school.Schools', on_delete=models.CASCADE)
-    selected_class = models.ForeignKey('school.Classes', on_delete=models.CASCADE)
+    selected_class = models.ForeignKey('Class.Class', on_delete=models.CASCADE)
     student_changes = models.BooleanField(default=False)
     batch_marks_changes = models.BooleanField(default=False)
     single_marks_changes = models.BooleanField(default=False)
