@@ -53,7 +53,7 @@ class TestGuestViews(TestCase):
         url = reverse('school:all')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'school/school.html')
+        self.assertTemplateUsed(response, 'school/school_list.html')
 
     def test_school_create(self):
         url = reverse('school:create')

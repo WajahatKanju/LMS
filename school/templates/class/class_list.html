@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Classes</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Schools</th>
+        <th>Pass Percentage</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for school_class in school_classes %}
+        <tr>
+          <td>{{ school_class.classes.name }}</td>
+          <td>{{ school_class.school.name }}</td>
+          <td>{{ school_class.pass_percentage }}%</td>
+          <td>
+            <a href="{% url 'school_class:update' school_class.pk %}" class="btn btn-primary btn-sm">Edit</a>
+            <form action="{% url 'school_class:delete' school_class.pk %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No classes found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+</title>
+</head>
+<body>
+
+</body>
+</html>

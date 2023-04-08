@@ -12,7 +12,7 @@ from .models import Schools
 
 # Create your views here.
 class SchoolView(ListView):
-    template_name = 'school/school.html'
+    template_name = 'school/school_list.html'
 
     context = {}
 
@@ -34,7 +34,7 @@ class SchoolDetailView(View):
 
 
 class SchoolCreateView(LoginRequiredMixin, View):
-    template_name = 'school/school_create.html'
+    template_name = 'school/school_form.html'
 
     context = {}
 
@@ -56,7 +56,7 @@ class SchoolCreateView(LoginRequiredMixin, View):
 
 
 class SchoolUpdateView(LoginRequiredMixin, View):
-    template_name = 'school/school_create.html'
+    template_name = 'school/school_form.html'
     context = {}
 
     def get(self, request, pk=None):
