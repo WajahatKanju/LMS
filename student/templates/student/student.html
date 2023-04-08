@@ -8,7 +8,7 @@
                 <div class="col-md-3 mb-3">
                     <label for="school">Filter by School</label>
                     <select id="school" name="school" class="form-control">
-                        <option value="all">All Schools</option>
+                        <option value="">All Schools</option>
                         {% for school in schools %}
                             <option value="{{ school.id }}"
                                     {% if selected_school == school.id %}selected{% endif %}>{{ school.name }}</option>
@@ -28,7 +28,7 @@
                 <div class="col-md-3 mb-3">
                     <label for="gender">Filter by Gender</label>
                     <select id="gender" name="gender" class="form-control">
-                        <option value="all">All Genders</option>
+                        <option value="">All Genders</option>
                         <option value="Male" {% if selected_gender == "Male" %}selected{% endif %}>Male</option>
                         <option value="Female" {% if selected_gender == "Female" %}selected{% endif %}>Female</option>
                     </select>

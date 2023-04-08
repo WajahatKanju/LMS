@@ -15,9 +15,12 @@ from school.models import SchoolClasses
 class HomeView(View):
     template_name = 'main/index.html'
 
-    context = {}
+    context = {
+        'title': 'School Management System',
+    }
 
     def get(self, request):
+
         return render(request, self.template_name, self.context)
 
 
