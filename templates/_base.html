@@ -1,3 +1,4 @@
+{% load user_settings %}
 {% load static %}
 {% load user_settings %}
 <!DOCTYPE html>
@@ -13,7 +14,6 @@
 
     <link rel="stylesheet" href="{% static 'main.css' %}"/>
     <link rel="stylesheet" href="{% static 'nav.css' %}"/>
-{#    <link rel="stylesheet" href="{% static 'content.css' %}"/>#}
     <link rel="stylesheet" href="{% static 'card.css' %}"/>
     <link rel="stylesheet" href="{% static 'table.css' %}"/>
     <link rel="stylesheet" href="{% static 'buttons.css' %}"/>
@@ -28,20 +28,25 @@
 <body>
 {% block nav %}
     <nav>
-         <div class="user-info">
-            <div class="user-name">John Doe</div>
-            <div class="user-designation">Web Developer</div>
+        <div class="user-info">
+            <div class="user-name">{{ user.username }}</div>
+            <div class="user-designation">{{ user.designation }}</div>
         </div>
         <ul class="menu">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Admin</a></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+
         </ul>
 
-        <div class="login">
-            <a href="#">Login</a>
-        </div>
+        <ul class="menu">
+            {% if user.is_authenticated %}
+                <li><a  class="link-danger" href="{% url 'account_logout' %}">Logout</a></li>
+            {% else %}
+                <li><a class="link-info" href="{% url 'account_login' %}">Login</a></li>
+                <li><a class="link-info" href="{% url 'account_signup' %}">Signup</a></li>
+            {% endif %}
+        </ul>
+
         <input type="checkbox" id="menu-toggle"/>
         <label class="menu-button" for="menu-toggle">
             <span></span>
@@ -68,13 +73,15 @@
             <div class="text-center">
                 {% user_school_header request.user %}
             </div>
-            <a {% if request.path == '/' %} style="display: none;" {% endif %} href="javascript:void(0);"
+            <a {% if request.path == '/' or 'accounts/' %} style="display: none;" {% endif %} href="javascript:void(0);"
                                             onclick="history.go(-1);" class="btn btn-outline-danger mb-5">
                 <i class="bi bi-arrow-left m-0" aria-hidden="false"></i> Back
             </a>
+
             {% block content %}
 
             {% endblock content %}
+
         </div>
 
     </div>
