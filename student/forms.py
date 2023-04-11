@@ -44,3 +44,15 @@ class StudentForm(forms.ModelForm):
         if grade not in SchoolClasses.objects.all():
             raise forms.ValidationError("Please select a valid grade.")
         return grade
+
+    def clean_student_cnic(self):
+        student_cnic = self.cleaned_data['student_cnic']
+        if len(student_cnic) < 11:
+            raise forms.ValidationError("CNIC length should be at least 11.")
+        return student_cnic
+
+    def clean_father_cnic(self):
+        father_cnic = self.cleaned_data['father_cnic']
+        if len(father_cnic) < 11:
+            raise forms.ValidationError("CNIC length should be at least 11.")
+        return father_cnic
