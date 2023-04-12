@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector("form");
 
     form.addEventListener("submit", function (event) {
-        // Prevent the default form submission behavior
+        event.preventDefault(); // prevent the default form submission behavior
 
         // Get the form field values
         const rollNoValue = rollNo.value;
@@ -224,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (existingRollNoSpan) {
             existingRollNoSpan.remove();
         }
-
         rollNo.parentElement.insertBefore(rollNoSpan, rollNo);
 
         // Add a span element to show the previously submitted admissionNo value
@@ -236,13 +235,70 @@ document.addEventListener('DOMContentLoaded', () => {
         if (existingAdmissionNoSpan) {
             existingAdmissionNoSpan.remove();
         }
-
         admissionNo.parentElement.insertBefore(admissionNoSpan, admissionNo);
-        form.submit()
+
+        // Submit The Form Using Ajax
+        // Get the form data
+        const formData = new FormData(form);
+
+        // Add the CSRF token to the form data
+        const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        formData.append('csrfmiddlewaretoken', csrfToken);
+
+        // Send an AJAX POST request to the form's action URL
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/register-student/');
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.response);
+            if (response.success) {
+                // Handle successful form submission here
+                console.log('Form submitted successfully');
+            } else {
+                // Handle form submission errors here
+                const errors = JSON.parse(response.errors);
+                const cnicWarning = 'CNIC length should be at least 11.';
+                const cnicFields = ['student_cnic', 'father_cnic'];
+
+                // Display warning message for CNIC fields with errors
+                for (const field of cnicFields) {
+                    const inputField = document.getElementById(`id_student-${field}`);
+                    const errorMessages = errors[`${field}`];
+                    const warningElem = inputField.nextElementSibling;
+
+                    // console.log(`${errors}`)
+                    // console.log(`${field}`)
+                    console.log(response)
+                    if (errorMessages && errorMessages.length > 0) {
+                        const hasCnicWarning = errorMessages.some((message) => message.message === cnicWarning);
+                        if (hasCnicWarning) {
+                            if (!warningElem || !warningElem.classList.contains('text-warning')) {
+                                // insert a new warning
+                                const newWarningElem = document.createElement('span');
+                                newWarningElem.className = 'text-warning';
+                                newWarningElem.innerHTML = '<strong><small>' + cnicWarning + '</small></strong>';
+                                inputField.parentNode.insertBefore(newWarningElem, inputField.nextSibling);
+                            }
+                        } else {
+                            if (warningElem && warningElem.classList.contains('text-warning')) {
+                                inputField.parentNode.removeChild(warningElem);
+                            }
+                        }
+                    } else {
+                        if (warningElem && warningElem.classList.contains('text-warning')) {
+                            inputField.parentNode.removeChild(warningElem);
+                        }
+                    }
+                }
+            }
+
+        };
+        xhr.send(formData);
+
     });
 
 
-});
+})
 
 
 // Load filters on page load

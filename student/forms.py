@@ -7,7 +7,6 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from school.models import Schools, SchoolClasses
 from .models import Student
-from django.core.exceptions import ValidationError
 
 
 class StudentForm(forms.ModelForm):
@@ -40,7 +39,6 @@ class StudentForm(forms.ModelForm):
 
     def clean_grade(self):
         grade = self.cleaned_data['grade']
-        print('clean_grade method called. grade:', grade)
         if grade not in SchoolClasses.objects.all():
             raise forms.ValidationError("Please select a valid grade.")
         return grade

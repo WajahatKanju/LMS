@@ -1,11 +1,17 @@
 {% extends '_base.html' %}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid ">
+        <div class="container-fluid my-5">
+
+            <a href="{% url 'student:create' %}" class="btn btn-info btn-lg float-end">
+                Admit New Student
+            </a>
+        </div>
         <h2>Students</h2>
         <form method="get" action="">
             <div class="row">
-                <div class="col-md-3 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="school">Filter by School</label>
                     <select id="school" name="school" class="form-control">
                         <option value="">All Schools</option>
@@ -15,7 +21,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="class">Filter by Class</label>
                     <select id="class" name="class" class="form-control">
                         <option value="">All Classes</option>
@@ -25,7 +31,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-2 mb-3">
                     <label for="gender">Filter by Gender</label>
                     <select id="gender" name="gender" class="form-control">
                         <option value="">All Genders</option>

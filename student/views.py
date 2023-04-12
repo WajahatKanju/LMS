@@ -24,25 +24,22 @@ class StudentView(View):
         class_id = request.GET.get('class')
         query = request.GET.get('search')
 
+        students = Student.objects.all()
+
         if query:
-            students = Student.objects.filter(
+            students = students.filter(
                 Q(name__icontains=query) | Q(roll_no__icontains=query) | Q(admission_no__icontains=query) | Q(
                     student_cnic__icontains=query) | Q(father_cnic__icontains=query) | Q(
                     mobile__icontains=query)).distinct()
 
-        elif school_id and class_id:
-            students = Student.objects.filter(grade__school_id=school_id, grade__classes_id=class_id)
+        if school_id:
+            students = students.filter(grade__school_id=school_id)
 
-        elif school_id:
-            students = Student.objects.filter(grade__school_id=school_id)
-
-        elif class_id:
+        if class_id:
             students = Student.objects.filter(grade__classes_id=class_id)
 
-        elif gender:
+        if gender:
             students = Student.objects.filter(gender=gender)
-        else:
-            students = Student.objects.all()
 
         context = {'students': students, 'schools': schools, 'classes': classes,
                    'selected_school': school_id if school_id else None,
