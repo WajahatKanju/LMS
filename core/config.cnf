@@ -1,0 +1,6 @@
+# my.cnf
+[client]
+database = id20614685_chtitor
+user = id20614685_chitor
+password = Y=M9<XpKaq\+WtaV
+default-character-set = utf8
